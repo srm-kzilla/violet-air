@@ -1,24 +1,7 @@
 import React from "react";
 import { ScrollView, StyleSheet } from "react-native";
 import { Layout, Text, Input, Icon, Card } from "@ui-kitten/components";
-
-const EXAMPLE_CITIES = [
-  {
-    cityId: 5368361,
-    name: "Los Angeles",
-    country: "US",
-  },
-  {
-    cityId: 2643743,
-    name: "London",
-    country: "GB",
-  },
-  {
-    cityId: 1273294,
-    name: "Delhi",
-    country: "IN",
-  },
-];
+import { useCitySearch } from "./Cities";
 
 function CityRow({ city }) {
   return (
@@ -31,9 +14,10 @@ function CityRow({ city }) {
 }
 
 function CitiesList({ filter }) {
-  const cities = filter
-    ? EXAMPLE_CITIES.filter((c) => c.name.match(filter))
-    : EXAMPLE_CITIES;
+  const cities = useCitySearch(filter);
+  if (!cities) {
+    return null;
+  }
   return cities.map((city) => <CityRow city={city} key={city.cityId} />);
 }
 
