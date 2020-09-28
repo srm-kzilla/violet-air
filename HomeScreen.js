@@ -10,7 +10,7 @@ import { useCitySearch } from "./Cities";
 import { useCityFavorite, useFavorites } from "./CityFavorites";
 
 function CityRow({ city }) {
-  const [isSubscibed, setIsSubscribed] = useCityFavorite(city);
+  const [isSubscribed, setIsSubscribed] = useCityFavorite(city);
   return (
     <Card style={styles.cityRowCard}>
       <View style={styles.cityCardRow}>
@@ -21,10 +21,10 @@ function CityRow({ city }) {
         </View>
         <Button
           onPress={() => {
-            setIsSubscribed(!isSubscibed);
+            setIsSubscribed(!isSubscribed);
           }}
         >
-          {isSubscibed ? "Unsubscribe" : "Subscribe"}
+          {isSubscribed ? "Unsubscribe" : "Subscribe"}
         </Button>
       </View>
     </Card>
@@ -45,6 +45,7 @@ function SearchIcon(props) {
 
 function FavoriteCities() {
   const favorites = useFavorites();
+  if (!favorites) return null;
   return favorites.map((city) => <CityRow city={city} key={city.cityId} />);
 }
 
