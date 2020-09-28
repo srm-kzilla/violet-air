@@ -1,19 +1,32 @@
 import React from "react";
-import { ScrollView, StyleSheet } from "react-native";
-import { Layout, Text, Input, Icon, Card } from "@ui-kitten/components";
+import { View, ScrollView, StyleSheet } from "react-native";
+import { Layout, Text, Input, Icon, Card, Button } from "@ui-kitten/components";
 import { useCitySearch } from "./Cities";
+import { useCityFavorite, useFavorites } from "./CityFavorites";
 
 function CityRow({ city }) {
+  const [isSubscibed, setIsSubscribed] = useCityFavorite(city);
   return (
     <Card style={styles.cityRowCard}>
-      <Text>
-        {city.name}, {city.country}
-      </Text>
+      <View style={styles.cityCardRow}>
+        <View style={styles.cityCardText}>
+          <Text>
+            {city.name}, {city.country}
+          </Text>
+        </View>
+        <Button
+          onPress={() => {
+            setIsSubscribed(!isSubscibed);
+          }}
+        >
+          {isSubscibed ? "Unsubscribe" : "Subscribe"}
+        </Button>
+      </View>
     </Card>
   );
 }
 
-function CitiesList({ filter }) {
+function CitiesSearch({ filter }) {
   const cities = useCitySearch(filter);
   if (!cities) {
     return null;
@@ -23,6 +36,11 @@ function CitiesList({ filter }) {
 
 function SearchIcon(props) {
   return <Icon {...props} name="search-outline" />;
+}
+
+function FavoriteCities() {
+  const favorites = useFavorites();
+  return favorites.map((city) => <CityRow city={city} key={city.cityId} />);
 }
 
 export default function HomeScreen() {
@@ -40,7 +58,7 @@ export default function HomeScreen() {
         onChangeText={setCitySearch}
       />
       <ScrollView style={styles.scrollView}>
-        <CitiesList filter={citySearch} />
+        {citySearch ? <CitiesSearch filter={citySearch} /> : <FavoriteCities />}
       </ScrollView>
     </Layout>
   );
@@ -59,5 +77,11 @@ const styles = StyleSheet.create({
   },
   cityRowCard: {
     marginBottom: 8,
+  },
+  cityCardRow: {
+    flexDirection: "row",
+  },
+  cityCardText: {
+    flex: 1,
   },
 });
