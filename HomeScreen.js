@@ -5,14 +5,31 @@ import {
   StyleSheet,
   TouchableWithoutFeedback,
 } from "react-native";
-import { Layout, Text, Input, Icon, Card, Button } from "@ui-kitten/components";
+import {
+  Layout,
+  Text,
+  Input,
+  Icon,
+  Card,
+  Button,
+  TopNavigation,
+  Divider,
+} from "@ui-kitten/components";
 import { useCitySearch } from "./Cities";
 import { useCityFavorite, useFavorites } from "./CityFavorites";
+import { useNavigation } from "@react-navigation/native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 function CityRow({ city }) {
   const [isSubscribed, setIsSubscribed] = useCityFavorite(city);
+  const { navigate } = useNavigation();
   return (
-    <Card style={styles.cityRowCard}>
+    <Card
+      style={styles.cityRowCard}
+      onPress={() => {
+        navigate("City", { city });
+      }}
+    >
       <View style={styles.cityCardRow}>
         <View style={styles.cityCardText}>
           <Text>
@@ -53,45 +70,57 @@ export default function HomeScreen() {
   const [citySearch, setCitySearch] = React.useState("");
 
   return (
-    <Layout style={styles.layout}>
-      <Text category="h1" status="primary">
-        violet air
-      </Text>
-      <Input
-        value={citySearch}
-        placeholder="Search for your City"
-        accessoryLeft={SearchIcon}
-        accessoryRight={(props) => {
-          if (citySearch === "") return null;
-          return (
-            <TouchableWithoutFeedback
-              onPress={() => {
-                setCitySearch("");
-              }}
-            >
-              <Icon {...props} name="close-circle-outline" />
-            </TouchableWithoutFeedback>
-          );
-        }}
-        onChangeText={setCitySearch}
-      />
-      <ScrollView style={styles.scrollView}>
-        {citySearch ? <CitiesSearch filter={citySearch} /> : <FavoriteCities />}
-      </ScrollView>
-    </Layout>
+    <SafeAreaView style={styles.container}>
+      <TopNavigation title="Violet Air" alignment="center" />
+      <Divider />
+      <Layout style={styles.layout}>
+        <Input
+          value={citySearch}
+          style={styles.input}
+          placeholder="Search for your City"
+          accessoryLeft={SearchIcon}
+          accessoryRight={(props) => {
+            if (citySearch === "") return null;
+            return (
+              <TouchableWithoutFeedback
+                onPress={() => {
+                  setCitySearch("");
+                }}
+              >
+                <Icon {...props} name="close-circle-outline" />
+              </TouchableWithoutFeedback>
+            );
+          }}
+          onChangeText={setCitySearch}
+        />
+        <ScrollView
+          style={styles.scrollView}
+          contentContainerStyle={styles.scrollContainer}
+        >
+          {citySearch ? (
+            <CitiesSearch filter={citySearch} />
+          ) : (
+            <FavoriteCities />
+          )}
+        </ScrollView>
+      </Layout>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
   layout: {
     flex: 1,
-    marginTop: 20,
-    marginHorizontal: 12,
-    alignItems: "center",
   },
+  input: { marginTop: 12, marginHorizontal: 12 },
   scrollView: {
     flex: 1,
-    alignSelf: "stretch",
+  },
+  scrollContainer: {
+    padding: 12,
   },
   cityRowCard: {
     marginBottom: 8,
