@@ -1,20 +1,30 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Button,
   Divider,
   Icon,
   Layout,
+  Spinner,
   Text,
   TopNavigation,
   TopNavigationAction,
   useTheme,
 } from "@ui-kitten/components";
-import { SafeAreaView, StyleSheet, View } from "react-native";
-import { useCityStats } from "./CityAir";
+import { StyleSheet, View } from "react-native";
+import { useCity, useCityStats } from "./CityAir";
 import { useCityFavorite } from "./CityFavorites";
+import { SafeAreaView } from "react-native-safe-area-context";
+import MapView, { Marker } from "react-native-maps";
 
 function BackIcon(props) {
   return <Icon {...props} name="arrow-back" />;
+}
+
+function MapIcon(props) {
+  return <Icon {...props} name="map" />;
+}
+function InfoIcon(props) {
+  return <Icon {...props} name="info" />;
 }
 
 function FavoriteRow({ city }) {
@@ -41,6 +51,79 @@ function FavoriteRow({ city }) {
   );
 }
 
+function CityStats({ city }) {
+  const stats = useCityStats(city.cityId);
+  console.log("City stats...", stats);
+  return (
+    <Layout style={styles.layout}>
+      {stats && (
+        <>
+          <View style={styles.valueRow}>
+            <Text category="h4">PM2.5</Text>
+            <Text>{stats.avgPM2_5.toFixed(0)}</Text>
+          </View>
+          <View style={styles.valueRow}>
+            <Text category="h4">Temperature</Text>
+            <Text>{stats.avgTempF.toFixed(0)}°F</Text>
+          </View>
+          <View style={styles.valueRow}>
+            <Text category="h4">Humidity</Text>
+            <Text>{stats.avgHumidity.toFixed(0)}%</Text>
+          </View>
+          <View style={styles.valueRow}>
+            <Text category="h4">Sensor Count</Text>
+            <Text>{stats.sensorCount}</Text>
+          </View>
+          <View style={styles.valueRow}>
+            <Text category="h4">Population</Text>
+            <Text>{stats.population}</Text>
+          </View>
+        </>
+      )}
+      <FavoriteRow city={city} />
+    </Layout>
+  );
+}
+function Map({ fullCity }) {
+  return (
+    <MapView
+      initialRegion={{
+        latitude: fullCity?.lat,
+        longitude: fullCity?.lon,
+        latitudeDelta: 0.1,
+        longitudeDelta: 0.1,
+      }}
+      style={{ flex: 1 }}
+    >
+      {fullCity.sensors.map(
+        (sensor) =>
+          sensor.PM2_5Value && (
+            <Marker
+              key={sensor.ID}
+              coordinate={{
+                latitude: sensor.Lat,
+                longitude: sensor.Lon,
+              }}
+              title={sensor.Label}
+              description={sensor.PM2_5Value && `PM2.5 = ${sensor.PM2_5Value}`}
+            />
+          )
+      )}
+    </MapView>
+  );
+}
+function CityMap({ city }) {
+  const fullCity = useCity(city.cityId);
+  console.log("umm the full city", fullCity);
+  if (!fullCity)
+    return (
+      <Layout>
+        <Spinner />
+      </Layout>
+    );
+  return <Map fullCity={fullCity} />;
+}
+
 export default function CityScreen({ route, navigation }) {
   const { city } = route.params;
 
@@ -51,7 +134,8 @@ export default function CityScreen({ route, navigation }) {
   const BackAction = () => (
     <TopNavigationAction icon={BackIcon} onPress={navigateBack} />
   );
-  const stats = useCityStats(city.cityId);
+
+  const [isMapView, setIsMapView] = useState(true);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -59,35 +143,26 @@ export default function CityScreen({ route, navigation }) {
         title={city.name}
         alignment="center"
         accessoryLeft={BackAction}
+        accessoryRight={() =>
+          isMapView ? (
+            <TopNavigationAction
+              icon={InfoIcon}
+              onPress={() => {
+                setIsMapView(false);
+              }}
+            />
+          ) : (
+            <TopNavigationAction
+              icon={MapIcon}
+              onPress={() => {
+                setIsMapView(true);
+              }}
+            />
+          )
+        }
       />
       <Divider />
-      <Layout style={styles.layout}>
-        {stats && (
-          <>
-            <View style={styles.valueRow}>
-              <Text category="h4">PM2.5</Text>
-              <Text>{stats.avgPM2_5.toFixed(0)}</Text>
-            </View>
-            <View style={styles.valueRow}>
-              <Text category="h4">Temperature</Text>
-              <Text>{stats.avgTempF.toFixed(0)}°F</Text>
-            </View>
-            <View style={styles.valueRow}>
-              <Text category="h4">Humidity</Text>
-              <Text>{stats.avgHumidity.toFixed(0)}%</Text>
-            </View>
-            <View style={styles.valueRow}>
-              <Text category="h4">Sensor Count</Text>
-              <Text>{stats.sensorCount}</Text>
-            </View>
-            <View style={styles.valueRow}>
-              <Text category="h4">Population</Text>
-              <Text>{stats.population}</Text>
-            </View>
-          </>
-        )}
-        <FavoriteRow city={city} />
-      </Layout>
+      {isMapView ? <CityMap city={city} /> : <CityStats city={city} />}
     </SafeAreaView>
   );
 }

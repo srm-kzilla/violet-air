@@ -72,7 +72,7 @@ function getCityStore(cityId) {
   return cityStores[cityId];
 }
 
-export function useCity() {
+export function useCity(cityId) {
   if (!cityId) throw new Error("Must provide cityId to useCity");
   const store = getCityStore(cityId);
   const [stats, setStats] = useState(store.get());

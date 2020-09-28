@@ -21,7 +21,6 @@ import { useNavigation } from "@react-navigation/native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 function CityRow({ city }) {
-  const [isSubscribed, setIsSubscribed] = useCityFavorite(city);
   const { navigate } = useNavigation();
   return (
     <Card
@@ -36,13 +35,6 @@ function CityRow({ city }) {
             {city.name}, {city.country}
           </Text>
         </View>
-        <Button
-          onPress={() => {
-            setIsSubscribed(!isSubscribed);
-          }}
-        >
-          {isSubscribed ? "Unsubscribe" : "Subscribe"}
-        </Button>
       </View>
     </Card>
   );
