@@ -53,7 +53,6 @@ function FavoriteRow({ city }) {
 
 function CityStats({ city }) {
   const stats = useCityStats(city.cityId);
-  console.log("City stats...", stats);
   return (
     <Layout style={styles.layout}>
       {stats && (
@@ -114,10 +113,9 @@ function Map({ fullCity }) {
 }
 function CityMap({ city }) {
   const fullCity = useCity(city.cityId);
-  console.log("umm the full city", fullCity);
   if (!fullCity)
     return (
-      <Layout>
+      <Layout style={styles.spinnerLayout}>
         <Spinner />
       </Layout>
     );
@@ -189,4 +187,9 @@ const styles = StyleSheet.create({
   },
   container: { flex: 1 },
   layout: { flex: 1, paddingHorizontal: 12 },
+  spinnerLayout: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
 });

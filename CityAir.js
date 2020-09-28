@@ -17,7 +17,6 @@ function createCityStore(cityId) {
       if (cityState === null && !loadPromise) {
         loadPromise = fetch(`https://aven.io/api/purpleair?city=${cityId}`)
           .then((res) => {
-            console.log(res.status, cityId);
             return res.json();
           })
           .then((city) => {
