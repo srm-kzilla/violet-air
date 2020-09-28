@@ -1,5 +1,10 @@
 import React from "react";
-import { View, ScrollView, StyleSheet } from "react-native";
+import {
+  View,
+  ScrollView,
+  StyleSheet,
+  TouchableWithoutFeedback,
+} from "react-native";
 import { Layout, Text, Input, Icon, Card, Button } from "@ui-kitten/components";
 import { useCitySearch } from "./Cities";
 import { useCityFavorite, useFavorites } from "./CityFavorites";
@@ -55,6 +60,18 @@ export default function HomeScreen() {
         value={citySearch}
         placeholder="Search for your City"
         accessoryLeft={SearchIcon}
+        accessoryRight={(props) => {
+          if (citySearch === "") return null;
+          return (
+            <TouchableWithoutFeedback
+              onPress={() => {
+                setCitySearch("");
+              }}
+            >
+              <Icon {...props} name="close-circle-outline" />
+            </TouchableWithoutFeedback>
+          );
+        }}
         onChangeText={setCitySearch}
       />
       <ScrollView style={styles.scrollView}>
