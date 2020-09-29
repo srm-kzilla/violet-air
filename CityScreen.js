@@ -53,22 +53,29 @@ function FavoriteRow({ city }) {
 
 function CityStats({ city }) {
   const stats = useCityStats(city.cityId);
+  console.log({ stats });
   return (
     <Layout style={styles.layout}>
       {stats && (
         <>
-          <View style={styles.valueRow}>
-            <Text category="h4">PM2.5</Text>
-            <Text>{stats.avgPM2_5.toFixed(0)}</Text>
-          </View>
-          <View style={styles.valueRow}>
-            <Text category="h4">Temperature</Text>
-            <Text>{stats.avgTempF.toFixed(0)}°F</Text>
-          </View>
-          <View style={styles.valueRow}>
-            <Text category="h4">Humidity</Text>
-            <Text>{stats.avgHumidity.toFixed(0)}%</Text>
-          </View>
+          {stats.avgPM2_5 && (
+            <View style={styles.valueRow}>
+              <Text category="h4">PM2.5</Text>
+              <Text>{stats.avgPM2_5.toFixed(0)}</Text>
+            </View>
+          )}
+          {stats.avgTempF && (
+            <View style={styles.valueRow}>
+              <Text category="h4">Temperature</Text>
+              <Text>{stats.avgTempF.toFixed(0)}°F</Text>
+            </View>
+          )}
+          {stats.avgHumidity && (
+            <View style={styles.valueRow}>
+              <Text category="h4">Humidity</Text>
+              <Text>{stats.avgHumidity.toFixed(0)}%</Text>
+            </View>
+          )}
           <View style={styles.valueRow}>
             <Text category="h4">Sensor Count</Text>
             <Text>{stats.sensorCount}</Text>
