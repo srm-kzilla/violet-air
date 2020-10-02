@@ -2,6 +2,7 @@ import React from "react";
 import * as eva from "@eva-design/eva";
 import HomeScreen from "./HomeScreen";
 import CityScreen from "./CityScreen";
+import SplashScreen from './SplashScreen';
 import { ApplicationProvider, IconRegistry } from "@ui-kitten/components";
 import { EvaIconsPack } from "@ui-kitten/eva-icons";
 import { NavigationContainer } from "@react-navigation/native";
@@ -20,17 +21,25 @@ const THEME = {
   "color-primary-900": "#291C7A",
 };
 
-const Stack = createStackNavigator();
+const AppStack = createStackNavigator();
+const AppStackScreen = () => (
+  <AppStack.Navigator headerMode="none">
+    <AppStack.Screen name="Home" component={HomeScreen} />
+    <AppStack.Screen name="City" component={CityScreen} />
+  </AppStack.Navigator>
+);
+
+const RootStack = createStackNavigator();
 
 export default () => (
   <>
     <IconRegistry icons={EvaIconsPack} />
     <ApplicationProvider {...eva} theme={THEME}>
       <NavigationContainer>
-        <Stack.Navigator headerMode="none">
-          <Stack.Screen name="Home" component={HomeScreen} />
-          <Stack.Screen name="City" component={CityScreen} />
-        </Stack.Navigator>
+        <RootStack.Navigator headerMode="none">
+          <RootStack.Screen name="Splash" component={SplashScreen} />
+          <RootStack.Screen name="App" component={AppStackScreen} />
+        </RootStack.Navigator>
       </NavigationContainer>
     </ApplicationProvider>
   </>
