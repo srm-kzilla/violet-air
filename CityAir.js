@@ -1,7 +1,4 @@
 import { useEffect, useState } from "react";
-import AsyncStorage from "@react-native-community/async-storage";
-
-const cityStores = {};
 
 function createCityStore(cityId) {
   let cityState = null;
@@ -40,30 +37,7 @@ function createCityStore(cityId) {
   };
 }
 
-function getCityStats(city) {
-  if (!city) return null;
-  const {
-    avgTempF,
-    avgPM2_5,
-    avgHumidity,
-    avgPressure,
-    sensorCount,
-    loc,
-    name,
-    population,
-  } = city;
-  return {
-    avgTempF,
-    avgPM2_5,
-    avgHumidity,
-    avgPressure,
-    sensorCount,
-    lat: loc.coordinates[1],
-    lon: loc.coordinates[0],
-    name,
-    population,
-  };
-}
+const cityStores = {};
 
 function getCityStore(cityId) {
   if (cityStores[cityId]) return cityStores[cityId];
@@ -78,19 +52,6 @@ export function useCity(cityId) {
   useEffect(() => {
     function handleCityState(city) {
       setStats(city);
-    }
-    return store.subscribe(handleCityState);
-  }, [store]);
-  return stats;
-}
-
-export function useCityStats(cityId) {
-  if (!cityId) throw new Error("Must provide cityId to useCityStats");
-  const store = getCityStore(cityId);
-  const [stats, setStats] = useState(getCityStats(store.get()));
-  useEffect(() => {
-    function handleCityState(city) {
-      setStats(getCityStats(city));
     }
     return store.subscribe(handleCityState);
   }, [store]);

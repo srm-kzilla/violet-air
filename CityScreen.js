@@ -11,7 +11,7 @@ import {
   useTheme,
 } from "@ui-kitten/components";
 import { StyleSheet, View } from "react-native";
-import { useCity, useCityStats } from "./CityAir";
+import { useCity } from "./CityAir";
 import { useCityFavorite } from "./CityFavorites";
 import { SafeAreaView } from "react-native-safe-area-context";
 import MapView, { Marker } from "react-native-maps";
@@ -52,8 +52,7 @@ function FavoriteRow({ city }) {
 }
 
 function CityStats({ city }) {
-  const stats = useCityStats(city.cityId);
-  console.log({ stats });
+  const stats = useCity(city.cityId);
   return (
     <Layout style={styles.layout}>
       {stats && (
