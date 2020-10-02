@@ -3,7 +3,7 @@ import AsyncStorage from "@react-native-community/async-storage";
 import { City } from "./HomeScreen";
 
 let favorites: City[] | null = null;
-const subscriptions = new Set();
+const subscriptions: Set<Function> = new Set();
 
 const FAVS_STORAGE_KEY = "FavoriteCities-0";
 
@@ -26,7 +26,7 @@ AsyncStorage.getItem(FAVS_STORAGE_KEY)
     console.error("Could not load favorites", err);
   });
 
-function setFavorites(transaction) {
+function setFavorites(transaction: Function) {
   favorites = transaction(favorites);
   subscriptions.forEach((handle) => {
     handle(favorites);
@@ -39,9 +39,9 @@ function setFavorites(transaction) {
 }
 
 export function useFavorites() {
-  const [state, setState] = useState<City[]>(favorites);
+  const [state, setState] = useState<City[] | null>(favorites);
   useEffect(() => {
-    function handleUpdate(newFavorites) {
+    function handleUpdate(newFavorites: City[]) {
       setState(newFavorites);
     }
     subscriptions.add(handleUpdate);

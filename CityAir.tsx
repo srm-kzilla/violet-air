@@ -1,15 +1,22 @@
 import { useEffect, useState } from "react";
+import { City } from "./HomeScreen";
+
+
+type CityStore =  {
+  subscribe: (handler: Function) => void;
+  get: () => City | null;
+}
 
 function createCityStore(cityId: string) {
-  let cityState = null;
-  const subscribers = new Set();
-  function setState(city) {
+  let cityState: City | null = null;
+  const subscribers: Set<Function> = new Set();
+  function setState(city: City) {
     cityState = city;
     subscribers.forEach((handle) => handle(city));
   }
-  let loadPromise;
+  let loadPromise: Promise<void> | null;
   return {
-    subscribe: (handler) => {
+    subscribe: (handler: Function) => {
       subscribers.add(handler);
       if (cityState === null && !loadPromise) {
         loadPromise = fetch(`https://aven.io/api/purpleair?city=${cityId}`)
@@ -37,20 +44,22 @@ function createCityStore(cityId: string) {
   };
 }
 
-const cityStores = {};
+const cityStores:{
+  [key: string]: CityStore;
+} = {};
 
-function getCityStore(cityId) {
+function getCityStore(cityId: string) {
   if (cityStores[cityId]) return cityStores[cityId];
   cityStores[cityId] = createCityStore(cityId);
   return cityStores[cityId];
 }
 
-export function useCity(cityId) {
+export function useCity(cityId: string) {
   if (!cityId) throw new Error("Must provide cityId to useCity");
   const store = getCityStore(cityId);
   const [stats, setStats] = useState(store.get());
   useEffect(() => {
-    function handleCityState(city) {
+    function handleCityState(city: City) {
       setStats(city);
     }
     return store.subscribe(handleCityState);
