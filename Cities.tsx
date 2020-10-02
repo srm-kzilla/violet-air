@@ -4,7 +4,7 @@ import { City } from "./HomeScreen";
 export function useCitySearch(filter: string): City[] | null {
   const trimmedFilter = filter.trim();
   const [cities, setCities] = useState(null);
-  const timeout = useRef<number>();
+  const timeout = useRef<number | null>();
   useEffect(() => {
     if (filter.length < 3) {
       return;
