@@ -10,24 +10,29 @@ import {
   TopNavigationAction,
   useTheme,
 } from "@ui-kitten/components";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, ImageProps } from "react-native";
 import { useCity } from "./CityAir";
 import { useCityFavorite } from "./CityFavorites";
 import { SafeAreaView } from "react-native-safe-area-context";
 import MapView, { Marker } from "react-native-maps";
+import { City } from "./HomeScreen";
+import { StackScreenProps } from "@react-navigation/stack";
+import { RootStackParamList } from "./App";
 
-function BackIcon(props) {
+type Props = StackScreenProps<RootStackParamList, 'City'>;
+
+function BackIcon(props: Partial<ImageProps> | undefined) {
   return <Icon {...props} name="arrow-back" />;
 }
 
-function MapIcon(props) {
+function MapIcon(props: Partial<ImageProps> | undefined) {
   return <Icon {...props} name="map" />;
 }
-function InfoIcon(props) {
+function InfoIcon(props: Partial<ImageProps> | undefined) {
   return <Icon {...props} name="info" />;
 }
 
-function FavoriteRow({ city }) {
+function FavoriteRow({ city }:{ city: City }) {
   const [isSubscribed, setIsSubscribed] = useCityFavorite(city);
   const theme = useTheme();
   return (
@@ -51,7 +56,7 @@ function FavoriteRow({ city }) {
   );
 }
 
-function CityStats({ city }) {
+function CityStats({ city }:{ city: City }) {
   const stats = useCity(city.cityId);
   return (
     <Layout style={styles.layout}>
@@ -89,7 +94,7 @@ function CityStats({ city }) {
     </Layout>
   );
 }
-function Map({ fullCity }) {
+function Map({ fullCity }:{ fullCity: City }) {
   return (
     <MapView
       initialRegion={{
@@ -117,7 +122,7 @@ function Map({ fullCity }) {
     </MapView>
   );
 }
-function CityMap({ city }) {
+function CityMap({ city }: { city: City }) {
   const fullCity = useCity(city.cityId);
   if (!fullCity)
     return (
@@ -128,7 +133,7 @@ function CityMap({ city }) {
   return <Map fullCity={fullCity} />;
 }
 
-export default function CityScreen({ route, navigation }) {
+export default function CityScreen({ route, navigation }: Props) {
   const { city } = route.params;
 
   const navigateBack = () => {

@@ -1,6 +1,6 @@
 import React from "react";
 import * as eva from "@eva-design/eva";
-import HomeScreen from "./HomeScreen";
+import HomeScreen, { City } from "./HomeScreen";
 import CityScreen from "./CityScreen";
 import { ApplicationProvider, IconRegistry } from "@ui-kitten/components";
 import { EvaIconsPack } from "@ui-kitten/eva-icons";
@@ -20,7 +20,12 @@ const THEME = {
   "color-primary-900": "#291C7A",
 };
 
-const Stack = createStackNavigator();
+export type RootStackParamList = {
+  Home: undefined;
+  City: { city: City };
+};
+
+const Stack = createStackNavigator<RootStackParamList>();
 
 export default () => (
   <>

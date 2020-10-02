@@ -25,7 +25,18 @@ export type City = {
   cityId: string;
   name: string;
   country: string;
+  lat: number;
+  lon: number;
+  sensors: Sensor[]
 };
+
+type Sensor = {
+  ID: string | number;
+  PM2_5Value?: string;
+  Lat: number;
+  Lon: number;
+  Label: string;
+}
 
 function CityRow({ city }: { city: City }) {
   const { navigate } = useNavigation();
@@ -65,12 +76,16 @@ function SearchIcon(props: Partial<ImageProps> | undefined) {
   return <Icon {...props} name="search-outline" />;
 }
 
-function FavoriteCities() {
+function FavoriteCities(): JSX.Element {
   const favorites = useFavorites();
-  if (!favorites) return null;
-  return favorites.map((city: City) => (
-    <CityRow city={city} key={city.cityId} />
-  ));
+  if (!favorites) return <></>;
+  return (
+    <>
+      {favorites.map((city: City) => (
+        <CityRow city={city} key={city.cityId} />
+      ))}
+    </>
+  );
 }
 
 export default function HomeScreen() {
