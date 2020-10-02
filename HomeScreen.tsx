@@ -4,6 +4,7 @@ import {
   ScrollView,
   StyleSheet,
   TouchableWithoutFeedback,
+  ImageProps,
 } from "react-native";
 import {
   Layout,
@@ -20,7 +21,13 @@ import { useCityFavorite, useFavorites } from "./CityFavorites";
 import { useNavigation } from "@react-navigation/native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-function CityRow({ city }) {
+export type City = {
+  cityId: string;
+  name: string;
+  country: string;
+};
+
+function CityRow({ city }: { city: City }) {
   const { navigate } = useNavigation();
   return (
     <Card
@@ -40,22 +47,30 @@ function CityRow({ city }) {
   );
 }
 
-function CitiesSearch({ filter }) {
-  const cities = useCitySearch(filter);
+function CitiesSearch({ filter }: { filter: string }): JSX.Element {
+  const cities: City[] | null = useCitySearch(filter);
   if (!cities) {
-    return null;
+    return <></>;
   }
-  return cities.map((city) => <CityRow city={city} key={city.cityId} />);
+  return (
+    <>
+      {cities.map((city: City) => (
+        <CityRow city={city} key={city.cityId} />
+      ))}
+    </>
+  );
 }
 
-function SearchIcon(props) {
+function SearchIcon(props: Partial<ImageProps> | undefined) {
   return <Icon {...props} name="search-outline" />;
 }
 
 function FavoriteCities() {
   const favorites = useFavorites();
   if (!favorites) return null;
-  return favorites.map((city) => <CityRow city={city} key={city.cityId} />);
+  return favorites.map((city: City) => (
+    <CityRow city={city} key={city.cityId} />
+  ));
 }
 
 export default function HomeScreen() {
@@ -72,7 +87,7 @@ export default function HomeScreen() {
           placeholder="Search for your City"
           accessoryLeft={SearchIcon}
           accessoryRight={(props) => {
-            if (citySearch === "") return null;
+            if (citySearch === "") return <></>;
             return (
               <TouchableWithoutFeedback
                 onPress={() => {

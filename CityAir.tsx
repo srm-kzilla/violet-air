@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-function createCityStore(cityId) {
+function createCityStore(cityId: string) {
   let cityState = null;
   const subscribers = new Set();
   function setState(city) {

@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from "react";
+import { City } from "./HomeScreen";
 
-export function useCitySearch(filter) {
+export function useCitySearch(filter: string): City[] | null {
   const trimmedFilter = filter.trim();
   const [cities, setCities] = useState(null);
   const timeout = useRef(null);
