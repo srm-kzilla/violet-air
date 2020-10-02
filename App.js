@@ -1,11 +1,12 @@
 import React from "react";
 import * as eva from "@eva-design/eva";
-import HomeScreen from "./HomeScreen";
-import CityScreen from "./CityScreen";
+import HomeStackScreen from "./HomeScreen";
+import SettingsStackScreen from "./SettingsScreen";
 import { ApplicationProvider, IconRegistry } from "@ui-kitten/components";
 import { EvaIconsPack } from "@ui-kitten/eva-icons";
 import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+
 
 const THEME = {
   ...eva.light,
@@ -20,17 +21,17 @@ const THEME = {
   "color-primary-900": "#291C7A",
 };
 
-const Stack = createStackNavigator();
+const Tab = createBottomTabNavigator();
 
 export default () => (
   <>
     <IconRegistry icons={EvaIconsPack} />
     <ApplicationProvider {...eva} theme={THEME}>
       <NavigationContainer>
-        <Stack.Navigator headerMode="none">
-          <Stack.Screen name="Home" component={HomeScreen} />
-          <Stack.Screen name="City" component={CityScreen} />
-        </Stack.Navigator>
+        <Tab.Navigator>
+          <Tab.Screen name="Home" component={HomeStackScreen} />
+          <Tab.Screen name="Settings" component={SettingsStackScreen}/>
+        </Tab.Navigator>
       </NavigationContainer>
     </ApplicationProvider>
   </>
