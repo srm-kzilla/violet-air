@@ -25,12 +25,9 @@ export type City = {
   cityId: string;
   name: string;
   country: string;
-  lat: number;
-  lon: number;
-  sensors: Sensor[]
 };
 
-type Sensor = {
+export type Sensor = {
   ID: string | number;
   PM2_5Value?: string;
   Lat: number;

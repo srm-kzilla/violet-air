@@ -4,12 +4,12 @@ import { City } from "./HomeScreen";
 export function useCitySearch(filter: string): City[] | null {
   const trimmedFilter = filter.trim();
   const [cities, setCities] = useState(null);
-  const timeout = useRef<number | null>();
+  const timeout = useRef<NodeJS.Timeout | null>();
   useEffect(() => {
     if (filter.length < 3) {
       return;
     }
-    clearTimeout(timeout.current as number);
+    clearTimeout(timeout.current as NodeJS.Timeout);
     timeout.current = setTimeout(() => {
       fetch(`https://aven.io/api/cities?name=${trimmedFilter}`)
         .then((res) => res.json())

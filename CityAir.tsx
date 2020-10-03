@@ -1,16 +1,27 @@
 import { useEffect, useState } from "react";
-import { City } from "./HomeScreen";
+import { City, Sensor } from "./HomeScreen";
 
 
 type CityStore =  {
   subscribe: (handler: Function) => void;
-  get: () => City | null;
+  get: () => CityStats | null;
+}
+
+export type CityStats = {
+  avgPM2_5: number;
+  avgTempF: number;
+  avgHumidity: number;
+  sensorCount: number;
+  population: number;
+  lat: number;
+  lon: number;
+  sensors: Sensor[];
 }
 
 function createCityStore(cityId: string) {
-  let cityState: City | null = null;
+  let cityState: CityStats | null = null;
   const subscribers: Set<Function> = new Set();
-  function setState(city: City) {
+  function setState(city: CityStats) {
     cityState = city;
     subscribers.forEach((handle) => handle(city));
   }
@@ -59,7 +70,7 @@ export function useCity(cityId: string) {
   const store = getCityStore(cityId);
   const [stats, setStats] = useState(store.get());
   useEffect(() => {
-    function handleCityState(city: City) {
+    function handleCityState(city: CityStats) {
       setStats(city);
     }
     return store.subscribe(handleCityState);

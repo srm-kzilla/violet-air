@@ -11,7 +11,7 @@ import {
   useTheme,
 } from "@ui-kitten/components";
 import { StyleSheet, View, ImageProps } from "react-native";
-import { useCity } from "./CityAir";
+import { useCity, CityStats as CityStatsType } from "./CityAir";
 import { useCityFavorite } from "./CityFavorites";
 import { SafeAreaView } from "react-native-safe-area-context";
 import MapView, { Marker } from "react-native-maps";
@@ -94,7 +94,7 @@ function CityStats({ city }:{ city: City }) {
     </Layout>
   );
 }
-function Map({ fullCity }:{ fullCity: City }) {
+function Map({ fullCity }:{ fullCity: CityStatsType }) {
   return (
     <MapView
       initialRegion={{
