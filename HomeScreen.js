@@ -21,6 +21,8 @@ import { useCityStats } from './CityAir';
 import { useNavigation } from "@react-navigation/native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+const PM25avgLimit = 50;
+
 function CityRow({ city }) {
   const { navigate } = useNavigation();
   const cityCardAlert = city.stats?.alert ? styles.cityCardAlert : '';
@@ -64,7 +66,7 @@ function FavoriteCities() {
   favorites.map(favorite => {
     favorite.stats = useCityStats(favorite.cityId);
     if(favorite.stats)
-      favorite.stats.alert = favorite.stats?.avgPM2_5 > 50;
+      favorite.stats.alert = favorite.stats?.avgPM2_5 > PM25avgLimit;
   });
 
   if (!favorites) return null;
