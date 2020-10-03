@@ -10,7 +10,7 @@ import {
   TopNavigationAction,
   useTheme,
 } from "@ui-kitten/components";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, Alert } from "react-native";
 import { useCity } from "./CityAir";
 import { useCityFavorite } from "./CityFavorites";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -59,28 +59,43 @@ function CityStats({ city }) {
         <>
           {stats.avgPM2_5 && (
             <View style={styles.valueRow}>
-              <Text category="h4">PM2.5</Text>
+              <Text 
+                category="h4"
+                onPress={() =>{Alert.alert("PM2.5","This refers to atmospheric particulate matter that has a diameter less than 2.5 micrometers in micrograms per cubic meter.")}}
+              >PM2.5</Text>
               <Text>{stats.avgPM2_5.toFixed(0)}</Text>
             </View>
           )}
           {stats.avgTempF && (
             <View style={styles.valueRow}>
-              <Text category="h4">Temperature</Text>
+              <Text 
+                category="h4"
+                onPress={() =>{Alert.alert("Temperature","This is the average temperature in Fahrenheit.")}}
+              >Temperature</Text>
               <Text>{stats.avgTempF.toFixed(0)}°F</Text>
             </View>
           )}
           {stats.avgHumidity && (
             <View style={styles.valueRow}>
-              <Text category="h4">Humidity</Text>
+              <Text 
+                category="h4" 
+                onPress={() =>{Alert.alert("Humidity","This is the concentration of water vapor present in the air.")}} 
+              >Humidity</Text>
               <Text>{stats.avgHumidity.toFixed(0)}%</Text>
             </View>
           )}
           <View style={styles.valueRow}>
-            <Text category="h4">Sensor Count</Text>
+            <Text 
+              category="h4"
+              onPress={() =>{Alert.alert("Sensor Count","This is the number of sensors present around this city.")}}
+            >Sensor Count</Text>
             <Text>{stats.sensorCount}</Text>
           </View>
           <View style={styles.valueRow}>
-            <Text category="h4">Population</Text>
+            <Text 
+              category="h4"
+              onPress={() =>{Alert.alert("Population","This is the total population of this city.")}}
+            >Population</Text>
             <Text>{stats.population}</Text>
           </View>
         </>
