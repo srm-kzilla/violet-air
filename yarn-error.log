@@ -1,0 +1,70 @@
+Arguments: 
+  /usr/bin/node /usr/bin/nodejs-yarn add --dev typescript react-native-typescript-transformer @types/react @types/react-native
+
+PATH: 
+  /home/arnolfokam/anaconda3/condabin:/home/arnolfokam/.local/bin:/home/arnolfokam/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/home/arnolfokam/.composer/vendor/bin:/var/lib/snapd/snap/bin:/home/arnolfokam/flutter/bin:/home/arnolfokam/bin:/usr/lib/jvm/java-11-openjdk-11.0.8.10-2.fc32.x86_64/bin:/home/arnolfokam/Android/Sdk/emulator:/home/arnolfokam/Android/Sdk/tools:/home/arnolfokam/Android/Sdk/tools/bin:/home/arnolfokam/Android/Sdk/platform-tools:/home/arnolfokam/flutter/bin:/home/arnolfokam/bin:/usr/lib/jvm/java-11-openjdk-11.0.8.10-2.fc32.x86_64/bin:/home/arnolfokam/Android/Sdk/emulator:/home/arnolfokam/Android/Sdk/tools:/home/arnolfokam/Android/Sdk/tools/bin:/home/arnolfokam/Android/Sdk/platform-tools
+
+Yarn version: 
+  1.21.1
+
+Node version: 
+  12.16.3
+
+Platform: 
+  linux x64
+
+Trace: 
+  Error: connect ENETUNREACH 104.16.21.35:443 - Local (0.0.0.0:0)
+      at internalConnect (net.js:921:16)
+      at defaultTriggerAsyncIdScope (internal/async_hooks.js:296:12)
+      at emitLookup (net.js:1063:9)
+      at /usr/lib/node_modules/yarn/node_modules/dnscache/lib/index.js:125:28
+      at /usr/lib/node_modules/yarn/node_modules/dnscache/lib/cache.js:116:13
+      at RawTask.call (/usr/lib/node_modules/yarn/node_modules/asap/asap.js:40:19)
+      at flush (/usr/lib/node_modules/yarn/node_modules/asap/raw.js:50:29)
+      at processTicksAndRejections (internal/process/task_queues.js:79:11)
+      at runNextTicks (internal/process/task_queues.js:66:3)
+      at processImmediate (internal/timers.js:429:9)
+
+npm manifest: 
+  {
+    "main": "node_modules/expo/AppEntry.js",
+    "scripts": {
+      "start": "expo start",
+      "android": "expo start --android",
+      "ios": "expo start --ios",
+      "web": "expo start --web",
+      "eject": "expo eject"
+    },
+    "dependencies": {
+      "@eva-design/eva": "^2.0.0",
+      "@react-native-community/async-storage": "^1.12.0",
+      "@react-native-community/masked-view": "0.1.10",
+      "@react-navigation/native": "^5.7.5",
+      "@react-navigation/stack": "^5.9.2",
+      "@ui-kitten/components": "^5.0.0",
+      "@ui-kitten/eva-icons": "^5.0.0",
+      "expo": "~39.0.2",
+      "expo-status-bar": "~1.0.2",
+      "react": "16.13.1",
+      "react-dom": "16.13.1",
+      "react-native": "https://github.com/expo/react-native/archive/sdk-39.0.2.tar.gz",
+      "react-native-gesture-handler": "~1.7.0",
+      "react-native-reanimated": "~1.13.0",
+      "react-native-safe-area-context": "3.1.4",
+      "react-native-screens": "~2.10.1",
+      "react-native-svg": "12.1.0",
+      "react-native-web": "~0.13.12",
+      "react-native-maps": "0.27.1"
+    },
+    "devDependencies": {
+      "@babel/core": "~7.9.0"
+    },
+    "private": true
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile

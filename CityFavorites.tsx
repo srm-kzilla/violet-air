@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-community/async-storage";
+import { City } from "./HomeScreen";
 
-let favorites = null;
-const subscriptions = new Set();
+let favorites: City[] | null = null;
+const subscriptions: Set<Function> = new Set();
 
 const FAVS_STORAGE_KEY = "FavoriteCities-0";
 
@@ -25,7 +26,7 @@ AsyncStorage.getItem(FAVS_STORAGE_KEY)
     console.error("Could not load favorites", err);
   });
 
-function setFavorites(transaction) {
+function setFavorites(transaction: Function) {
   favorites = transaction(favorites);
   subscriptions.forEach((handle) => {
     handle(favorites);
@@ -38,9 +39,9 @@ function setFavorites(transaction) {
 }
 
 export function useFavorites() {
-  const [state, setState] = useState(favorites);
+  const [state, setState] = useState<City[] | null>(favorites);
   useEffect(() => {
-    function handleUpdate(newFavorites) {
+    function handleUpdate(newFavorites: City[]) {
       setState(newFavorites);
     }
     subscriptions.add(handleUpdate);
@@ -51,16 +52,16 @@ export function useFavorites() {
   return state;
 }
 
-export function useCityFavorite(city) {
+export function useCityFavorite(city: City): [ boolean, (isFavorite: boolean) => void ] {
   const favCities = useFavorites();
   const isSubscribed =
     !!favCities &&
-    !!favCities.find((favCity) => favCity.cityId === city.cityId);
-  function setIsFavorite(isFavorite) {
+    !!favCities.find((favCity: City) => favCity.cityId === city.cityId);
+  function setIsFavorite(isFavorite: boolean) {
     if (isFavorite) {
-      setFavorites((favorites) => [...favorites, city]);
+      setFavorites((favorites: City[]) => [...favorites, city]);
     } else {
-      setFavorites((favorites) =>
+      setFavorites((favorites: City[]) =>
         favorites.filter((c) => c.cityId !== city.cityId)
       );
     }
