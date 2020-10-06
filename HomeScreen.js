@@ -25,10 +25,15 @@ const PM25avgLimit = 50;
 
 function CityRow({ city }) {
   const { navigate } = useNavigation();
-  const cityCardAlert = city.stats?.alert ? styles.cityCardAlert : '';
-  const cityCardAlertText = city.stats?.alert ? styles.cityCardAlertText : '';
-  const cityAlertIcon = city.stats?.alert ? '⚠️' : '';
-  console.log(cityCardAlertText);
+  city.stats = useCityStats( city.cityId );
+  
+  function cityHasAlert(avgPM2_5 = 0) {
+    return avgPM2_5 >= PM25avgLimit;
+  }
+  const cityCardAlert = cityHasAlert(city.stats?.avgPM2_5) ? styles.cityCardAlert : '';
+  const cityCardAlertText = cityHasAlert(city.stats?.avgPM2_5) ? styles.cityCardAlertText : '';
+  const cityAlertIcon = cityHasAlert(city.stats?.avgPM2_5) ? '⚠️' : '';
+  
   return (
     <Card
       style={styles.cityRowCard, cityCardAlert}
@@ -61,13 +66,6 @@ function SearchIcon(props) {
 
 function FavoriteCities() {
   const favorites = useFavorites();
-
-  // Add the stats for each city
-  favorites.map(favorite => {
-    favorite.stats = useCityStats(favorite.cityId);
-    if(favorite.stats)
-      favorite.stats.alert = favorite.stats?.avgPM2_5 > PM25avgLimit;
-  });
 
   if (!favorites) return null;
   return favorites.map((city) => <CityRow city={city} key={city.cityId} />);
