@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import {
   Button,
   Divider,
@@ -10,7 +10,8 @@ import {
   TopNavigationAction,
   useTheme,
 } from "@ui-kitten/components";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, BackHandler } from "react-native";
+import { useFocusEffect } from "@react-navigation/native";
 import { useCity } from "./CityAir";
 import { useCityFavorite } from "./CityFavorites";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -131,22 +132,56 @@ function CityMap({ city }) {
 export default function CityScreen({ route, navigation }) {
   const { city } = route.params;
 
-  const navigateBack = () => {
-    navigation.goBack();
-  };
+  // const navigateBack = () => {
+  //   navigation.goBack();
+  // };
 
-  const BackAction = () => (
-    <TopNavigationAction icon={BackIcon} onPress={navigateBack} />
-  );
+  // const BackAction = () => (
+  //   <TopNavigationAction icon={BackIcon} onPress={navigateBack} />
+  // );
 
   const [isMapView, setIsMapView] = useState(true);
+
+  useFocusEffect(//for hardware back press
+    useCallback(() => {
+      const onBackPress = () => {
+        if (isMapView) {
+          return false;
+        } else {
+          setIsMapView(true);
+          return true;
+        }
+      };
+
+      BackHandler.addEventListener("hardwareBackPress", onBackPress);
+
+      return () =>
+        BackHandler.removeEventListener("hardwareBackPress", onBackPress);
+    }, [isMapView])
+  );
 
   return (
     <SafeAreaView style={styles.container}>
       <TopNavigation
         title={city.name}
         alignment="center"
-        accessoryLeft={BackAction}
+        accessoryLeft={() =>//for header back press
+          isMapView ? (
+            <TopNavigationAction
+              icon={BackIcon}
+              onPress={() => {
+                navigation.goBack();
+              }}
+            />
+          ) : (
+            <TopNavigationAction
+              icon={BackIcon}
+              onPress={() => {
+                setIsMapView(true);
+              }}
+            />
+          )
+        }
         accessoryRight={() =>
           isMapView ? (
             <TopNavigationAction
