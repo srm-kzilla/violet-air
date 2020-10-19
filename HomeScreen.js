@@ -11,7 +11,6 @@ import {
   Input,
   Icon,
   Card,
-  Button,
   TopNavigation,
   Divider,
 } from "@ui-kitten/components";
@@ -19,6 +18,8 @@ import { useCitySearch } from "./Cities";
 import { useCityFavorite, useFavorites } from "./CityFavorites";
 import { useNavigation } from "@react-navigation/native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { createStackNavigator } from "@react-navigation/stack";
+import CityScreen from "./CityScreen";
 
 function CityRow({ city }) {
   const { navigate } = useNavigation();
@@ -58,7 +59,7 @@ function FavoriteCities() {
   return favorites.map((city) => <CityRow city={city} key={city.cityId} />);
 }
 
-export default function HomeScreen() {
+function HomeScreen() {
   const [citySearch, setCitySearch] = React.useState("");
 
   return (
@@ -98,6 +99,17 @@ export default function HomeScreen() {
       </Layout>
     </SafeAreaView>
   );
+}
+
+const HomeStack = createStackNavigator();
+
+export default function HomeStackScreen() {
+  return (
+    <HomeStack.Navigator headerMode="none">
+      <HomeStack.Screen name="Home" component={HomeScreen} />
+      <HomeStack.Screen name="City" component={CityScreen} />
+    </HomeStack.Navigator>
+  )
 }
 
 const styles = StyleSheet.create({
