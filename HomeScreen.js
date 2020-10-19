@@ -17,22 +17,34 @@ import {
 } from "@ui-kitten/components";
 import { useCitySearch } from "./Cities";
 import { useCityFavorite, useFavorites } from "./CityFavorites";
+import { useCityStats } from './CityAir';
 import { useNavigation } from "@react-navigation/native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+const PM25avgLimit = 50;
+
 function CityRow({ city }) {
   const { navigate } = useNavigation();
+  city.stats = useCityStats( city.cityId );
+  
+  function cityHasAlert(avgPM2_5 = 0) {
+    return avgPM2_5 >= PM25avgLimit;
+  }
+  const cityCardAlert = cityHasAlert(city.stats?.avgPM2_5) ? styles.cityCardAlert : '';
+  const cityCardAlertText = cityHasAlert(city.stats?.avgPM2_5) ? styles.cityCardAlertText : '';
+  const cityAlertIcon = cityHasAlert(city.stats?.avgPM2_5) ? '⚠️' : '';
+  
   return (
     <Card
-      style={styles.cityRowCard}
+      style={styles.cityRowCard, cityCardAlert}
       onPress={() => {
         navigate("City", { city });
       }}
     >
       <View style={styles.cityCardRow}>
         <View style={styles.cityCardText}>
-          <Text>
-            {city.name}, {city.country}
+          <Text style={cityCardAlertText}>
+            {city.name}, {city.country} {cityAlertIcon}
           </Text>
         </View>
       </View>
@@ -54,6 +66,7 @@ function SearchIcon(props) {
 
 function FavoriteCities() {
   const favorites = useFavorites();
+
   if (!favorites) return null;
   return favorites.map((city) => <CityRow city={city} key={city.cityId} />);
 }
@@ -123,4 +136,16 @@ const styles = StyleSheet.create({
   cityCardText: {
     flex: 1,
   },
+  cityCardAlert : {
+    backgroundColor : 'red'
+  },
+  cityCardAlertText : {
+    color : 'white'
+  },
+  leftText : {
+    textAlign : "left"
+  },
+  rightText : {
+    textAlign : "right"
+  }
 });
